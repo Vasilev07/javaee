@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Dictionary;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -39,8 +40,9 @@ public class RunTest {
     public static void main(String[] args) throws Exception {
         UserInstructions.runTestByGivenName();
         runUserInput();
-        Map<String, TestHistoryMethod> failedTestsHistory = TestHistory.getFailedTestsHistory();
-        for (Map.Entry<String, TestHistoryMethod> entry : failedTestsHistory.entrySet()) {
+        Map<String, List<TestHistoryMethod>> failedTestsHistory = TestHistory.getFailedTestsHistory();
+        for (Map.Entry<String, List<TestHistoryMethod>> entry : failedTestsHistory.entrySet()) {
+            System.out.println("______________________");
             System.out.println(entry.getKey() + " = " + entry.getValue());
         }
     }
