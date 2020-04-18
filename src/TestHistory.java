@@ -8,7 +8,6 @@ public class TestHistory {
 
     public static void addFailedTest(String testFileName, String methodName) {
         boolean isTestRanBefore = checkIfTestWasRanInThePast(testFileName);
-//        boolean isMethodRanBefore = checkIfTestMethodWasRanInThePast(testFileName, methodName);
 
         if (isTestRanBefore){
             boolean isMethodRanBefore = checkIfTestMethodWasRanInThePast(testFileName, methodName);
@@ -21,17 +20,12 @@ public class TestHistory {
 
                 test.set(testMethodIndex, testMethod);
             } else {
-                TestHistoryMethod newMethod = new TestHistoryMethod(methodName);
-                newMethod.increaseOccurance();
-                test.add(newMethod);
+                createNewMetod(test, methodName);
             }
         } else {
             List<TestHistoryMethod> newList = new ArrayList<TestHistoryMethod>();
-            TestHistoryMethod newMethod = new TestHistoryMethod(methodName);
 
-            newMethod.increaseOccurance();
-
-            newList.add(newMethod);
+            createNewMetod(newList, methodName);
 
             failedTests.put(testFileName, newList);
         }
@@ -39,6 +33,14 @@ public class TestHistory {
 
     public static Map<String, List<TestHistoryMethod>> getFailedTestsHistory() {
         return failedTests;
+    }
+
+    private static void createNewMetod(List<TestHistoryMethod> newList, String methodName) {
+        TestHistoryMethod newMethod = new TestHistoryMethod(methodName);
+
+        newMethod.increaseOccurance();
+
+        newList.add(newMethod);
     }
 
     private static boolean checkIfTestWasRanInThePast(String testFileName) {
