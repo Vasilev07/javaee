@@ -38,19 +38,18 @@ import java.util.regex.Pattern;
 
 public class RunTest {
     public static void main(String[] args) throws Exception {
+        // output to the console the commands that we are expecting
         UserInstructions.runTestByGivenName();
-        runUserInput();
-        Map<String, List<TestHistoryMethod>> failedTestsHistory = TestHistory.getFailedTestsHistory();
-        for (Map.Entry<String, List<TestHistoryMethod>> entry : failedTestsHistory.entrySet()) {
-            System.out.println("______________________");
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-            List<TestHistoryMethod> testHistoryMethods = entry.getValue();
 
-            for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
-                System.out.println(testHistoryMethod.getMethodName());
-                System.out.println(testHistoryMethod.getMethodOccurance());
+        // we are expecting exit input in order to break this loop
+        while (true) {
+            try {
+                runUserInput();
+            } catch (Exception e) {
+                break;
             }
         }
+
     }
 
     private static void runUserInput() throws Exception {
@@ -61,6 +60,18 @@ public class RunTest {
             String testNameToRun = userInput.substring(2);
             System.out.println(testNameToRun);
             runAllTestsForGivenClass(testNameToRun);
+        } else if(ValidateUserInput.isGetMostFailingTest(userInput)) {
+            Map<String, List<TestHistoryMethod>> failedTestsHistory = TestHistory.getFailedTestsHistory();
+            for (Map.Entry<String, List<TestHistoryMethod>> entry : failedTestsHistory.entrySet()) {
+                List<TestHistoryMethod> testHistoryMethods = entry.getValue();
+
+                for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
+                    System.out.println(testHistoryMethod.getMethodName());
+                    System.out.println(testHistoryMethod.getMethodOccurance());
+                }
+            }
+        } else if (ValidateUserInput.isExitCommand(userInput)) {
+            throw new Exception("should exit");
         }
     }
 
