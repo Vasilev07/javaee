@@ -10,6 +10,8 @@ public class TestHistoryMethod {
         return this.methodName;
     }
 
+    public int getMethodOccurance() { return this.methodOccurance; }
+
     public void increaseOccurance() {
         this.methodOccurance++;
     }

@@ -12,15 +12,18 @@ public class TestHistory {
 
         if (isTestRanBefore){
             boolean isMethodRanBefore = checkIfTestMethodWasRanInThePast(testFileName, methodName);
+            List<TestHistoryMethod> test = getTest(testFileName);
+
             if (isMethodRanBefore) {
-                List<TestHistoryMethod> test = getTest(testFileName);
                 TestHistoryMethod testMethod = getTestMethod(testFileName, methodName);
                 testMethod.increaseOccurance();
                 int testMethodIndex = getTestMethodIndex(testFileName, testMethod);
 
                 test.set(testMethodIndex, testMethod);
-                System.out.println("_______________");
-                System.out.println(test);
+            } else {
+                TestHistoryMethod newMethod = new TestHistoryMethod(methodName);
+                newMethod.increaseOccurance();
+                test.add(newMethod);
             }
         } else {
             List<TestHistoryMethod> newList = new ArrayList<TestHistoryMethod>();

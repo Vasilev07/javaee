@@ -44,6 +44,12 @@ public class RunTest {
         for (Map.Entry<String, List<TestHistoryMethod>> entry : failedTestsHistory.entrySet()) {
             System.out.println("______________________");
             System.out.println(entry.getKey() + " = " + entry.getValue());
+            List<TestHistoryMethod> testHistoryMethods = entry.getValue();
+
+            for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
+                System.out.println(testHistoryMethod.getMethodName());
+                System.out.println(testHistoryMethod.getMethodOccurance());
+            }
         }
     }
 
