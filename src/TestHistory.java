@@ -3,10 +3,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TestHistory {
-    private static Map<String, List<TestHistoryMethod>> failedTests = new HashMap<String, List<TestHistoryMethod>>();
 
-    public static void addFailedTest(String testFileName, String methodName) {
+public class TestHistory {
+    // {testA: [methodA: 1, methodB:2], testB: [methodA: 1, methodB:2]}
+    private static Map<String, List<TestHistoryMethod>> tests = new HashMap<String, List<TestHistoryMethod>>();
+
+    public static void addTest(String testFileName, String methodName) {
         boolean isTestRanBefore = checkIfTestWasRanInThePast(testFileName);
 
         if (isTestRanBefore){
@@ -20,22 +22,27 @@ public class TestHistory {
 
                 test.set(testMethodIndex, testMethod);
             } else {
-                createNewMetod(test, methodName);
+                createNewMethod(test, methodName);
             }
         } else {
             List<TestHistoryMethod> newList = new ArrayList<TestHistoryMethod>();
 
-            createNewMetod(newList, methodName);
+            createNewMethod(newList, methodName);
 
-            failedTests.put(testFileName, newList);
+            tests.put(testFileName, newList);
         }
     }
 
-    public static Map<String, List<TestHistoryMethod>> getFailedTestsHistory() {
-        return failedTests;
+
+    public static Map<String, List<TestHistoryMethod>> getTests() {
+        return tests;
     }
 
-    private static void createNewMetod(List<TestHistoryMethod> newList, String methodName) {
+    static Map<String, List<TestHistoryMethod>> getTestsHistory() {
+        return tests;
+    }
+
+    private static void createNewMethod(List<TestHistoryMethod> newList, String methodName) {
         TestHistoryMethod newMethod = new TestHistoryMethod(methodName);
 
         newMethod.increaseOccurance();
@@ -44,21 +51,20 @@ public class TestHistory {
     }
 
     private static boolean checkIfTestWasRanInThePast(String testFileName) {
-        return failedTests.containsKey(testFileName.toString());
+        return tests.containsKey(testFileName.toString());
     }
 
     private static List<TestHistoryMethod> getTest(String testFileName) {
-        return failedTests.get(testFileName);
+        return tests.get(testFileName);
     }
 
     private static int getTestMethodIndex(String testFileName, TestHistoryMethod method) {
         return getTest(testFileName).indexOf(method);
     }
 
-
     private static TestHistoryMethod getTestMethod(String testFileName, String methodName) {
         TestHistoryMethod method = null;
-        List<TestHistoryMethod> items = failedTests.get(testFileName);
+        List<TestHistoryMethod> items = tests.get(testFileName);
 
         for(TestHistoryMethod item : items){
             if(item.getMethodName() == methodName) {
@@ -70,7 +76,7 @@ public class TestHistory {
     }
 
     private static boolean checkIfTestMethodWasRanInThePast(String testFileName, String methodName) {
-        List<TestHistoryMethod> items = failedTests.get(testFileName);
+        List<TestHistoryMethod> items = tests.get(testFileName);
         boolean exist = false;
 
         for(TestHistoryMethod item : items){

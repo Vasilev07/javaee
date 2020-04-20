@@ -58,18 +58,10 @@ public class RunTest {
 
         if (ValidateUserInput.isRunAllTestsCommand(userInput)) {
             String testNameToRun = userInput.substring(2);
-            System.out.println(testNameToRun);
             runAllTestsForGivenClass(testNameToRun);
         } else if(ValidateUserInput.isGetMostFailingTest(userInput)) {
-            Map<String, List<TestHistoryMethod>> failedTestsHistory = TestHistory.getFailedTestsHistory();
-            for (Map.Entry<String, List<TestHistoryMethod>> entry : failedTestsHistory.entrySet()) {
-                List<TestHistoryMethod> testHistoryMethods = entry.getValue();
-
-                for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
-                    System.out.println(testHistoryMethod.getMethodName());
-                    System.out.println(testHistoryMethod.getMethodOccurance());
-                }
-            }
+            TestInformation currentTestInformation = FailedTestHistory.getMostFailingTest();
+            System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
         } else if (ValidateUserInput.isExitCommand(userInput)) {
             throw new Exception("should exit");
         }
@@ -141,7 +133,7 @@ public class RunTest {
                         } catch (Throwable ex) {
                             System.out.printf("%s - Test '%s' - failed: %s %n", ++count, method.getName(), ex.getCause());
                             failed++;
-                            TestHistory.addFailedTest(classNameToRun, method.getName());
+                            FailedTestHistory.addFailingTest(classNameToRun, method.getName());
                         }
 
                         if (shouldRunAfterEachMethod && afterEachMethod != null) {
