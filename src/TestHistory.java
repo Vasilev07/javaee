@@ -8,7 +8,7 @@ public class TestHistory {
     // {testA: [methodA: 1, methodB:2], testB: [methodA: 1, methodB:2]}
     private static Map<String, List<TestHistoryMethod>> tests = new HashMap<String, List<TestHistoryMethod>>();
 
-    public static void addTest(String testFileName, String methodName) {
+    public static void addTest(String testFileName, String methodName, boolean failed) {
         boolean isTestRanBefore = checkIfTestWasRanInThePast(testFileName);
 
         if (isTestRanBefore){
@@ -22,12 +22,12 @@ public class TestHistory {
 
                 test.set(testMethodIndex, testMethod);
             } else {
-                createNewMethod(test, methodName);
+                createNewMethod(test, methodName, failed);
             }
         } else {
             List<TestHistoryMethod> newList = new ArrayList<TestHistoryMethod>();
 
-            createNewMethod(newList, methodName);
+            createNewMethod(newList, methodName, failed);
 
             tests.put(testFileName, newList);
         }
@@ -42,8 +42,8 @@ public class TestHistory {
         return tests;
     }
 
-    private static void createNewMethod(List<TestHistoryMethod> newList, String methodName) {
-        TestHistoryMethod newMethod = new TestHistoryMethod(methodName);
+    private static void createNewMethod(List<TestHistoryMethod> newList, String methodName, boolean failed) {
+        TestHistoryMethod newMethod = new TestHistoryMethod(methodName, failed);
 
         newMethod.increaseOccurance();
 

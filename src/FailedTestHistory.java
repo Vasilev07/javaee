@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class FailedTestHistory extends TestHistory {
     public static void addFailingTest(String testFileName, String methodName) {
-        TestHistory.addTest(testFileName, methodName);
+        TestHistory.addTest(testFileName, methodName, true);
     }
 
 
@@ -16,7 +16,7 @@ public class FailedTestHistory extends TestHistory {
             List<TestHistoryMethod> testHistoryMethods = entry.getValue();
 
             for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
-                if (testHistoryMethod.getMethodOccurance() > mostFailedTestTimes) {
+                if (testHistoryMethod.getMethodOccurance() > mostFailedTestTimes && testHistoryMethod.isFailed()) {
                     mostFailedTestTimes = testHistoryMethod.getMethodOccurance();
                     mostFailedTestName = testHistoryMethod.getMethodName();
                 }

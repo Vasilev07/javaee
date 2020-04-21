@@ -57,10 +57,28 @@ public class RunTest {
         String userInput = in.nextLine();
 
         if (ValidateUserInput.isRunAllTestsCommand(userInput)) {
+            // skipping the number of the command
             String testNameToRun = userInput.substring(2);
             runAllTestsForGivenClass(testNameToRun);
+        }else if (ValidateUserInput.isHistoryCommand(userInput)){
+            Map<String, List<TestHistoryMethod>> allTests = TestHistory.getTests();
+            for (Map.Entry<String, List<TestHistoryMethod>> entry : allTests.entrySet()) {
+                List<TestHistoryMethod> testHistoryMethods = entry.getValue();
+                System.out.println("_".repeat(10));
+                System.out.println("test name: " + entry.getKey());
+                for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
+                    System.out.println("method name: " + testHistoryMethod.getMethodName());
+                    System.out.println("method name occurance: " + testHistoryMethod.getMethodOccurance());
+                    System.out.println("method failed: " + testHistoryMethod.isFailed());
+                    System.out.println("_".repeat(10));
+                }
+            }
+
         } else if(ValidateUserInput.isGetMostFailingTest(userInput)) {
             TestInformation currentTestInformation = FailedTestHistory.getMostFailingTest();
+            System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
+        } else if (ValidateUserInput.isGetMostPassingTest(userInput)) {
+            TestInformation currentTestInformation = PassedTestHistory.getMostPassingTest();
             System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
         } else if (ValidateUserInput.isExitCommand(userInput)) {
             throw new Exception("should exit");
@@ -130,6 +148,7 @@ public class RunTest {
                             method.invoke(testSuiteToRunReflection.newInstance());
                             System.out.printf("%s - Test '%s' - passed %n", ++count, method.getName());
                             passed++;
+                            PassedTestHistory.addPassingTest(classNameToRun, method.getName());
                         } catch (Throwable ex) {
                             System.out.printf("%s - Test '%s' - failed: %s %n", ++count, method.getName(), ex.getCause());
                             failed++;
