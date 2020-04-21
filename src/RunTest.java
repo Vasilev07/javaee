@@ -64,13 +64,13 @@ public class RunTest {
             Map<String, List<TestHistoryMethod>> allTests = TestHistory.getTests();
             for (Map.Entry<String, List<TestHistoryMethod>> entry : allTests.entrySet()) {
                 List<TestHistoryMethod> testHistoryMethods = entry.getValue();
-                System.out.println("_".repeat(10));
+                System.out.println("_________________");
                 System.out.println("test name: " + entry.getKey());
                 for (TestHistoryMethod testHistoryMethod: testHistoryMethods) {
                     System.out.println("method name: " + testHistoryMethod.getMethodName());
                     System.out.println("method name occurance: " + testHistoryMethod.getMethodOccurance());
                     System.out.println("method failed: " + testHistoryMethod.isFailed());
-                    System.out.println("_".repeat(10));
+                    System.out.println("_________________");
                 }
             }
 
