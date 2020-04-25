@@ -13,5 +13,4 @@ public class UserInput {
     public String get() {
         return userInput;
     }
-
 }

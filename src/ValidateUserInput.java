@@ -1,6 +1,7 @@
 import java.util.regex.Pattern;
 
 public class ValidateUserInput {
+    // TODO: might think of a base class and change the structure of this one
     private static final Pattern runAllTestsPattern = Pattern.compile("1.");
     private static final Pattern getHistory = Pattern.compile("2.");
     private static final Pattern getMostFailingTest = Pattern.compile("3.");
