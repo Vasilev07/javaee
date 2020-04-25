@@ -37,14 +37,21 @@ import java.util.regex.Pattern;
 }
 
 public class RunTest {
+
     public static void main(String[] args) throws Exception {
         // output to the console the commands that we are expecting
         UserInstructions.runTestByGivenName();
 
+        // creating scanner to get userInput
+        UserInput userInputReader = new UserInput();
+
+
         // we are expecting exit input in order to break this loop
         while (true) {
             try {
-                runUserInput();
+                userInputReader.read();
+                String userInput = userInputReader.get();
+                runUserInput(userInput);
             } catch (Exception e) {
                 break;
             }
@@ -52,10 +59,7 @@ public class RunTest {
 
     }
 
-    private static void runUserInput() throws Exception {
-        Scanner in = new Scanner(System.in);
-        String userInput = in.nextLine();
-
+    private static void runUserInput(String userInput) throws Exception {
         if (ValidateUserInput.isRunAllTestsCommand(userInput)) {
             // skipping the number of the command
             String testNameToRun = userInput.substring(2);
