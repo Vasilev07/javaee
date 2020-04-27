@@ -1,14 +1,11 @@
 import java.util.List;
 import java.util.Map;
 
-public class FailedTestHistory extends TestHistory {
-    public static void addFailingTest(String testFileName, String methodName) {
-        TestHistory.addTest(testFileName, methodName, true);
-    }
+public class FailedTestHistory {
 
 
-    public static TestInformation getMostFailingTest() {
-        Map<String, List<TestHistoryMethod>> testsHistory = TestHistory.getTestsHistory();
+    public TestInformation getMostFailingTest(Map<String, List<TestHistoryMethod>> tests) {
+        Map<String, List<TestHistoryMethod>> testsHistory = tests;
         String mostFailedTestName = null;
         int mostFailedTestTimes = 0;
 

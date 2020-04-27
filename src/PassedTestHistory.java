@@ -2,12 +2,8 @@ import java.util.List;
 import java.util.Map;
 
 public class PassedTestHistory extends TestHistory {
-    public static void addPassingTest(String testFileName, String methodName) {
-        TestHistory.addTest(testFileName, methodName, false);
-    }
-
-    public static TestInformation getMostPassingTest() {
-        Map<String, List<TestHistoryMethod>> testsHistory = TestHistory.getTestsHistory();
+    public TestInformation getMostPassingTest(Map<String, List<TestHistoryMethod>> tests) {
+        Map<String, List<TestHistoryMethod>> testsHistory = tests;
         String mostPassingTestName = null;
         int mostPassingTestTimes = 0;
 

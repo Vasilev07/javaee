@@ -37,16 +37,17 @@ import java.util.regex.Pattern;
 }
 
 public class RunTest {
-
-    public static void main(String[] args) throws Exception {
+    public final TestHistory testHistory = new TestHistory();
+    
+    public void run() throws Exception {
         // output to the console the commands that we are expecting
         UserInstructions.runTestByGivenName();
 
         // creating scanner to get userInput
         UserInput userInputReader = new UserInput();
 
-        RunCommands runner = new RunCommands();
-        
+        RunCommands runner = new RunCommands(testHistory);
+
         // we are expecting exit input in order to break this loop
         while (true) {
             try {
@@ -60,7 +61,7 @@ public class RunTest {
 
     }
 
-    public static void runAllTestsForGivenClass(String classNameToRun) throws Exception {
+    public void runAllTestsForGivenClass(String classNameToRun, TestHistory testHistory) throws Exception {
         System.out.println("Testing...");
         int passed = 0;
         int failed = 0;
@@ -123,11 +124,11 @@ public class RunTest {
                             method.invoke(testSuiteToRunReflection.newInstance());
                             System.out.printf("%s - Test '%s' - passed %n", ++count, method.getName());
                             passed++;
-                            PassedTestHistory.addPassingTest(classNameToRun, method.getName());
+                            testHistory.addTest(classNameToRun, method.getName(), false);
                         } catch (Throwable ex) {
                             System.out.printf("%s - Test '%s' - failed: %s %n", ++count, method.getName(), ex.getCause());
                             failed++;
-                            FailedTestHistory.addFailingTest(classNameToRun, method.getName());
+                            testHistory.addTest(classNameToRun, method.getName(), true);
                         }
 
                         if (shouldRunAfterEachMethod && afterEachMethod != null) {

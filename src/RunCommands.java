@@ -2,14 +2,21 @@ import java.util.List;
 import java.util.Map;
 
 public class RunCommands {
+    private TestHistory testsHistory;
+    private Map<String, List<TestHistoryMethod>> tests;
+    public RunCommands(TestHistory testHistory) {
+        this.testsHistory = testHistory;
+        this.tests = testsHistory.getTests();
+    }
 
+//    private TestHistory testHistory = new T
     public void runCommand(String userInput)throws Exception {
         if (ValidateUserInput.isRunAllTestsCommand(userInput)) {
             // skipping the number of the command
             String testNameToRun = userInput.substring(2);
-            RunTest.runAllTestsForGivenClass(testNameToRun);
+            new RunTest().runAllTestsForGivenClass(testNameToRun, testsHistory);
         }else if (ValidateUserInput.isHistoryCommand(userInput)){
-            Map<String, List<TestHistoryMethod>> allTests = TestHistory.getTests();
+            Map<String, List<TestHistoryMethod>> allTests = this.testsHistory.getTests();
             for (Map.Entry<String, List<TestHistoryMethod>> entry : allTests.entrySet()) {
                 List<TestHistoryMethod> testHistoryMethods = entry.getValue();
                 System.out.println("_________________");
@@ -23,10 +30,10 @@ public class RunCommands {
             }
 
         } else if(ValidateUserInput.isGetMostFailingTest(userInput)) {
-            TestInformation currentTestInformation = FailedTestHistory.getMostFailingTest();
+            TestInformation currentTestInformation = new FailedTestHistory().getMostFailingTest(this.tests);
             System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
         } else if (ValidateUserInput.isGetMostPassingTest(userInput)) {
-            TestInformation currentTestInformation = PassedTestHistory.getMostPassingTest();
+            TestInformation currentTestInformation = new PassedTestHistory().getMostPassingTest(this.tests);
             System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
         } else if (ValidateUserInput.isExitCommand(userInput)) {
             throw new Exception("should exit");
