@@ -9,7 +9,6 @@ public class RunCommands {
         this.tests = testsHistory.getTests();
     }
 
-//    private TestHistory testHistory = new T
     public void runCommand(String userInput)throws Exception {
         if (ValidateUserInput.isRunAllTestsCommand(userInput)) {
             // skipping the number of the command
@@ -30,10 +29,10 @@ public class RunCommands {
             }
 
         } else if(ValidateUserInput.isGetMostFailingTest(userInput)) {
-            TestInformation currentTestInformation = new FailedTestHistory().getMostFailingTest(this.tests);
+            TestInformation currentTestInformation = new TestHistory().getMostFailingOrPassing(this.tests, false);
             System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
         } else if (ValidateUserInput.isGetMostPassingTest(userInput)) {
-            TestInformation currentTestInformation = new PassedTestHistory().getMostPassingTest(this.tests);
+            TestInformation currentTestInformation = new TestHistory().getMostFailingOrPassing(this.tests, true);
             System.out.println(currentTestInformation.getMethodName() + ": " + currentTestInformation.getOccurances());
         } else if (ValidateUserInput.isExitCommand(userInput)) {
             throw new Exception("should exit");

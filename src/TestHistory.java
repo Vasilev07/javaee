@@ -9,6 +9,7 @@ public class TestHistory {
     private Map<String, List<TestHistoryMethod>> tests = new HashMap<String, List<TestHistoryMethod>>();
 
     public void addTest(String testFileName, String methodName, boolean failed) {
+        // try to think of optimisation
         boolean isTestRanBefore = checkIfTestWasRanInThePast(testFileName);
 
         if (isTestRanBefore){
@@ -22,12 +23,16 @@ public class TestHistory {
 
                 test.set(testMethodIndex, testMethod);
             } else {
-                this.createNewMethod(test, methodName, failed);
+                TestHistoryMethod newMethod = this.createNewMethod(methodName, failed);
+                newMethod.increaseOccurance();
+                test.add(newMethod);
             }
         } else {
             List<TestHistoryMethod> newList = new ArrayList<TestHistoryMethod>();
 
-            this.createNewMethod(newList, methodName, failed);
+            TestHistoryMethod newMethod = this.createNewMethod(methodName, failed);
+            newMethod.increaseOccurance();
+            newList.add(newMethod);
 
             this.tests.put(testFileName, newList);
         }
@@ -38,12 +43,8 @@ public class TestHistory {
         return this.tests;
     }
 
-    private void createNewMethod(List<TestHistoryMethod> newList, String methodName, boolean failed) {
-        TestHistoryMethod newMethod = new TestHistoryMethod(methodName, failed);
-
-        newMethod.increaseOccurance();
-
-        newList.add(newMethod);
+    private TestHistoryMethod createNewMethod(String methodName, boolean failed) {
+        return new TestHistoryMethod(methodName, failed);
     }
 
     private boolean checkIfTestWasRanInThePast(String testFileName) {
@@ -82,5 +83,31 @@ public class TestHistory {
         }
 
         return exist;
+    }
+
+    public TestInformation getMostFailingOrPassing(Map<String, List<TestHistoryMethod>> tests, boolean passing) {
+        Map<String, List<TestHistoryMethod>> testsHistory = tests;
+        String mostPassingOrFailingTestName = null;
+        int mostPassingOrFailingTestTimes = 0;
+
+        for (Map.Entry<String, List<TestHistoryMethod>> entry : testsHistory.entrySet()) {
+            List<TestHistoryMethod> testHistoryMethods = entry.getValue();
+
+            for (TestHistoryMethod testHistoryMethod : testHistoryMethods) {
+                if(!passing) {
+                    if (testHistoryMethod.getMethodOccurance() > mostPassingOrFailingTestTimes && !testHistoryMethod.isFailed()) {
+                        mostPassingOrFailingTestTimes = testHistoryMethod.getMethodOccurance();
+                        mostPassingOrFailingTestName = testHistoryMethod.getMethodName();
+                    }
+                } else {
+                    if (testHistoryMethod.getMethodOccurance() > mostPassingOrFailingTestTimes && testHistoryMethod.isFailed()) {
+                        mostPassingOrFailingTestTimes = testHistoryMethod.getMethodOccurance();
+                        mostPassingOrFailingTestName = testHistoryMethod.getMethodName();
+                    }
+                }
+            }
+        }
+
+        return TestInformation.getTestInformation(mostPassingOrFailingTestName, mostPassingOrFailingTestTimes);
     }
 }

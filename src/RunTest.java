@@ -102,13 +102,14 @@ public class RunTest {
 
             // iterate over class methods
             for (int i = 0; i < testSuiteToRunReflection.getDeclaredMethods().length; i++) {
+                Method method = testSuiteToRunReflection.getDeclaredMethods()[i];
+
                 // check if it is first run and should run BeforeAll method
-                if (i == 0 && shouldRunBeforeAllMethod && beforeAllMethod != null)
+                if (i == 0 && method.isAnnotationPresent(BeforeAll.class))
                 {
                     beforeAllMethod.invoke(testSuiteToRunReflection.newInstance());
                 }
 
-                Method method = testSuiteToRunReflection.getDeclaredMethods()[i];
 
                 if (method.isAnnotationPresent(Test.class)) {
                     Annotation testAnnotation = method.getAnnotation(Test.class);
